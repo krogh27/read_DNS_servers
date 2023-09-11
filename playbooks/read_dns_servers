@@ -1,0 +1,8 @@
+- name: check resolv.conf exists
+  stat:
+    path: /etc/resolv.conf
+  register: resolv_conf
+- name: check nameservers list in resolv.conf
+  vars:
+     contents: "{{ lookup('file', '/etc/resolv.conf') }}"
+  when: resolv_conf.stat.exists == True
