@@ -1,8 +1,15 @@
-- name: check resolv.conf exists
-  stat:
-    path: /etc/resolv.conf
-  register: resolv_conf
-- name: check nameservers list in resolv.conf
-  vars:
-     contents: "{{ lookup('file', '/etc/resolv.conf') }}"
-  when: resolv_conf.stat.exists == True
+---
+- name: Check Apache Service Status
+  hosts: apache  # Replace with the actual target server or inventory group
+  become: true  # Use sudo to run commands as a privileged user
+
+  tasks:
+    - name: Check Apache service status
+      command: systemctl is-active apache2
+      register: apache_status
+      changed_when: false
+
+    - name: Display Apache service status
+      debug:
+        msg: "Apache service is {{ 'running' if apache_status.stdout == 'active' else 'not running' }}"
+
