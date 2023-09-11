@@ -8,7 +8,9 @@
       command: systemctl is-active apache2
       register: apache_status
       changed_when: false
+      ignore_errors: yes  # Add this line to ignore errors
 
+  
     - name: Display Apache service status
       debug:
         msg: "Apache service is {{ 'running' if apache_status.stdout == 'active' else 'not running' }}"
